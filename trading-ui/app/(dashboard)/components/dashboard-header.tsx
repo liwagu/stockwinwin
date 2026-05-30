@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, UserRound } from "lucide-react";
 import { useState } from "react";
+import { isPaperDeskEnabled } from "@/lib/features";
 
 type DashboardHeaderProps = {
     displayName: string;
@@ -12,7 +13,7 @@ type DashboardHeaderProps = {
 
 const navItems = [
     { label: "Markets", href: "/dashboard" },
-    { label: "Paper", href: "/paper" },
+    ...(isPaperDeskEnabled() ? [{ label: "Paper", href: "/paper" }] : []),
     { label: "Billing", href: "/dashboard/billing" },
     { label: "Watchlist", href: "/dashboard/watchlist" },
 ];

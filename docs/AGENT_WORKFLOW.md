@@ -53,6 +53,14 @@ deterministic Macro / Research / Risk briefs
 - No tracked `.env` files except `.env.example`.
 - No agent may claim the product provides financial advice or guaranteed returns.
 - Every generated thesis must carry source quality, evidence, invalidation, and allocation guardrails.
+- `/paper` is behind `NEXT_PUBLIC_ENABLE_PAPER_DESK`; production keeps it off unless a release explicitly enables the flag after preview validation.
+
+## Deployment Boundary
+
+- Hackathon work deploys to preview or a separate demo project first, never directly to `www.stockwin.win`.
+- Production StockWin users must keep the existing forecast, auth, billing, and `/api/predictions` paths unchanged during Paper Desk validation.
+- A production release requires a clean worktree, passing CI, a secret scan, and live health checks for `https://www.stockwin.win/api/health` and `https://www.stockwin.win/api/predictions`.
+- If this branch is later ported into the main StockWin repo, keep the Paper Desk flag disabled in production until the route has passed preview smoke tests.
 
 ## Validation Gates
 
@@ -73,7 +81,15 @@ Frontend:
 
 ```bash
 cd trading-ui
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run lint
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run build
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run test
+```
+
+Production-off smoke:
+
+```bash
+cd trading-ui
 npm run lint
 npm run build
-npm run test
 ```

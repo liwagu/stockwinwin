@@ -89,6 +89,14 @@ The frontend must render enough of this structure that users can see why a thesi
 
 `/paper` is public and anonymous-first.
 
+It is gated by:
+
+```text
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true
+```
+
+The production default is disabled. Preview and hackathon deployments must opt in explicitly.
+
 Required UI:
 
 - one-person investment bank framing
