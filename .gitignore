@@ -107,7 +107,7 @@ htmlcov/
 *.pyc
 
 # Build/deploy artifacts
-models/
+/models/
 logs.txt
 
 # Test artifacts

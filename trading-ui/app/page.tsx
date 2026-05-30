@@ -10,6 +10,7 @@ import { Footer } from "./components/Footer";
 import { PricingSection } from "./components/PricingSection";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { trackEvent } from "@/lib/analytics";
+import { isPaperDeskEnabled } from "@/lib/features";
 import { SUPPORTED_MARKET_SYMBOLS } from "@/lib/markets";
 import { useAuth } from "./providers/AuthProvider";
 import type { PredictionForecast } from "@/types/predictions";
@@ -80,6 +81,7 @@ export default function LandingPage() {
   const authNavLink = !authLoading && user
     ? { href: "/dashboard", label: "Dashboard" }
     : { href: "/login", label: "Sign in" };
+  const paperDeskEnabled = isPaperDeskEnabled();
 
   return (
     <div className="sw-shell">
@@ -92,6 +94,7 @@ export default function LandingPage() {
         </Link>
         <div className="sw-nav-links">
           <Link href="#desk" className="sw-nav-link">Desk</Link>
+          {paperDeskEnabled && <Link href="/paper" className="sw-nav-link">Paper</Link>}
           <Link href="#pricing" className="sw-nav-link">Pricing</Link>
           <Link href={authNavLink.href} className="sw-nav-link">{authNavLink.label}</Link>
         </div>
