@@ -85,6 +85,33 @@ Each brief must include:
 
 The frontend must render enough of this structure that users can see why a thesis might fail.
 
+### Optional LLM Brief Adapter
+
+Brief generation is deterministic by default. An optional backend adapter can
+ask an Anthropic Messages-compatible endpoint to author the three briefs in a
+single HTTP call. It is gated entirely by environment variables and lives behind
+`ai-service/services/paper_desk_llm.py`.
+
+```text
+PAPER_DESK_AGENT_MODE=deterministic|llm   # default deterministic
+PAPER_DESK_LLM_BASE_URL=                   # required for llm mode
+PAPER_DESK_LLM_API_KEY=                    # required for llm mode
+PAPER_DESK_LLM_MODEL=claude-opus-4-8       # default
+```
+
+Rules:
+
+- Default and any misconfiguration keep the deterministic briefs.
+- `llm` mode makes exactly one HTTP call producing exactly three briefs
+  (`macro`, `research`, `risk`).
+- The response must be strict JSON. Missing credentials, HTTP errors, invalid
+  JSON, incomplete agents, or Pydantic validation failures silently fall back to
+  the deterministic briefs.
+- API key values are never logged or returned.
+- Successful LLM briefs carry `source_quality="model_inference"`; deterministic
+  briefs keep their existing `market_data` / `prediction_cache` / `fallback`
+  labels.
+
 ## Frontend Contract
 
 `/paper` is public and anonymous-first.

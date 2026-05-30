@@ -67,6 +67,22 @@ def build_assets() -> List[PaperDeskAsset]:
 
 
 def build_committee_briefs(assets: List[PaperDeskAsset]) -> List[PaperDeskBrief]:
+    """Build the Macro / Research / Risk briefs.
+
+    Deterministic by default. When ``PAPER_DESK_AGENT_MODE=llm`` and credentials
+    are configured, an optional LLM adapter may author the briefs instead; any
+    failure silently falls back to the deterministic briefs below.
+    """
+    from services.paper_desk_llm import generate_llm_briefs
+
+    llm_briefs = generate_llm_briefs(assets)
+    if llm_briefs is not None:
+        return llm_briefs
+
+    return _build_deterministic_briefs(assets)
+
+
+def _build_deterministic_briefs(assets: List[PaperDeskAsset]) -> List[PaperDeskBrief]:
     now = datetime.now(timezone.utc)
     edges = _prediction_edges()
     growth_edges = [value for symbol, value in edges.items() if symbol != "SPY"]

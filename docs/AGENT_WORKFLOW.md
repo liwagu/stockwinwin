@@ -43,8 +43,9 @@ deterministic Macro / Research / Risk briefs
 - Coding orchestrator: Codex in this desktop session.
 - Parallel code workers: Codex subagents with inherited model settings.
 - Cross-model review: local Claude Code CLI, invoked with stripped MCP/plugin config for speed and reliability.
-- Product runtime v1: deterministic rules, no LLM API call.
-- Product runtime later: add an LLM only behind an auditable service boundary; for the hackathon path, prefer Gemini API because the competition framing already aligns with Gemini/GCP, but do not hard-code a model until implementation.
+- Product runtime v1: deterministic rules by default, no LLM API call unless explicitly enabled.
+- Optional LLM briefs: an opt-in adapter (`ai-service/services/paper_desk_llm.py`) can author the Macro / Research / Risk briefs through one Anthropic Messages-compatible HTTP call, gated by `PAPER_DESK_AGENT_MODE=llm` plus `PAPER_DESK_LLM_BASE_URL` / `PAPER_DESK_LLM_API_KEY` / `PAPER_DESK_LLM_MODEL`. Any failure silently falls back to the deterministic briefs, API keys are never logged, and successful LLM briefs are labeled `source_quality="model_inference"`. See `docs/PAPER_DESK_V1_CONTRACT.md`.
+- Product runtime later: keep any LLM behind this auditable service boundary; for the hackathon path, the adapter is Anthropic Messages-compatible and defaults to `claude-opus-4-8`, but the endpoint stays configurable rather than hard-coded.
 
 ## Safety Rules
 
