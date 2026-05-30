@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { RefreshCw, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, RefreshCw, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 import { trackEvent } from "@/lib/analytics";
 import {
@@ -180,10 +180,21 @@ export default function PaperDeskClient() {
               Paper-only research log. No orders.
             </div>
           </div>
-          <div className="grid w-full min-w-0 gap-2 sm:grid-cols-3 lg:w-auto lg:min-w-[32rem]">
-            <Metric label="Mode" value="Paper" />
-            <Metric label="Benchmark" value={session?.benchmark_symbol || "SPY"} />
-            <Metric label="Status" value={session ? formatStatus(session.status) : "Loading"} />
+          <div className="flex w-full min-w-0 flex-col gap-5 lg:w-auto lg:min-w-[32rem] lg:items-end">
+            <a
+              href="https://paper.stockwin.win"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-12 w-fit items-center gap-2 rounded-full border border-[var(--color-rule)] bg-[var(--color-ink)] px-5 text-sm font-semibold text-[var(--color-surface)] transition hover:-translate-y-0.5 hover:bg-[var(--color-teal)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-teal)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]"
+            >
+              Change mode
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </a>
+            <div className="grid w-full min-w-0 gap-2 sm:grid-cols-3">
+              <Metric label="Mode" value="Paper" />
+              <Metric label="Benchmark" value={session?.benchmark_symbol || "SPY"} />
+              <Metric label="Status" value={session ? formatStatus(session.status) : "Loading"} />
+            </div>
           </div>
         </section>
 
