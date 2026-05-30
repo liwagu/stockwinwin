@@ -1,0 +1,153 @@
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# Environment files must stay local. Keep examples tracked.
+.env
+.env.*
+!.env.example
+ai-service/.env
+ai-service/.env.*
+!ai-service/.env.example
+trading-ui/.env
+trading-ui/.env.*
+!trading-ui/.env.example
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# H2 Database
+*.db
+*.trace.db
+
+# Logs
+logs/
+
+# Next.js / Node.js
+trading-ui/node_modules/
+node_modules/
+trading-ui/.next/
+trading-ui/out/
+trading-ui/dist/
+trading-ui/.turbo/
+ref/
+
+.playwright-mcp/
+.claude/
+.antigravitycli/
+.omc/
+.codex/
+.specify/
+.worktrees/
+
+# Local backup patches
+.backup-patches/
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+cache/
+.venv/
+specs/
+.vercel
+.gstack/
+
+# Python test/coverage artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+*.pyc
+
+# Build/deploy artifacts
+models/
+logs.txt
+
+# Test artifacts
+trading-ui/playwright-report/
+trading-ui/test-results/
+
+# Gemini/Copilot artifacts
+.gemini-clipboard/
+.pyc_cache/
+
+# BMAD config (user-local)
+_bmad/
+_bmad-output/
+
+# Local quarantine for screenshots, logs, and exploratory artifacts.
+_archive/local-artifacts/
+
+# Conductor artifacts
+conductor/
+
+# Speckit prompts (tool-generated)
+.github/prompts/
+
+# One-time analysis docs (not maintained)
+README_TICKER_PREDICTION.md
+TICKER_PREDICTION_*.md
+trading-ui/ARCHITECTURE_ANALYSIS.md
+trading-ui/QUICK_REFERENCE.md
+
+# Duplicate nested directory (accidental copy)
+trading-ui/trading-ui/
+
+# Lock files (npm is canonical, not bun)
+trading-ui/bun.lock
+
+# Standalone test scripts (not part of test suite)
+ai-service/test_data_availability.py
+ai-service/test_full_prediction.py
+ai-service/test_maticusdt.py
+ai-service/test_stocks.py
+
+# AI service venv
+ai-service/venv/

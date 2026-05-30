@@ -1,0 +1,35 @@
+FROM python:3.12-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    KRONOS_DEVICE=cpu \
+    KRONOS_MODEL_NAME=NeoQuasar/Kronos-base \
+    KRONOS_TOKENIZER_NAME=NeoQuasar/Kronos-Tokenizer-base \
+    KRONOS_MAX_CONTEXT=512 \
+    KRONOS_CLIP=5 \
+    MODEL_CACHE_DIR=./models/cache
+
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only ai-service files
+COPY ai-service/requirements.txt ./
+
+# Install Python dependencies (CPU-only PyTorch to reduce image size by ~2.5GB)
+RUN pip install --upgrade pip \
+    && pip install torch --index-url https://download.pytorch.org/whl/cpu \
+    && sed '/^torch/d' requirements.txt | pip install -r /dev/stdin
+
+# Model Registry Pattern:
+# - Inference code is shipped in the container (kronos_integration/)
+# - Model weights are downloaded from Hugging Face Hub at startup
+
+COPY ai-service/ ./
+
+EXPOSE 8000
+
+CMD ["python", "main.py"]

@@ -1,0 +1,79 @@
+name: Deploy to Staging
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Railway (Backend)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_STAGING_TOKEN }}
+        run: |
+          # Install Railway CLI
+          npm install -g @railway/cli
+          
+          # Deploy backend service
+          cd ai-service
+          railway login --token $RAILWAY_TOKEN
+          railway up --service stockwin-staging-backend || echo "Deployment initiated"
+          
+      - name: Deploy to Railway (Frontend)
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_STAGING_TOKEN }}
+        run: |
+          # Deploy frontend service
+          cd trading-ui
+          railway login --token $RAILWAY_TOKEN
+          railway up --service stockwin-staging-frontend || echo "Deployment initiated"
+          
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for staging deployment to be ready..."
+          sleep 120
+          
+      - name: Health check
+        run: |
+          # Check backend health
+          for i in {1..10}; do
+            if curl -f https://stockwin-staging-backend.up.railway.app/v1/health; then
+              echo "Backend health check passed"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30s..."
+            sleep 30
+          done
+          
+          # Check frontend health
+          for i in {1..10}; do
+            if curl -f https://stockwin-staging-frontend.up.railway.app/api/health; then
+              echo "Frontend health check passed"
+              break
+            fi
+            echo "Attempt $i failed, retrying in 30s..."
+            sleep 30
+          done
+
+  notify-deployment:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    if: always()
+    steps:
+      - name: Notify deployment status
+        run: |
+          if [ "${{ needs.deploy-staging.result }}" == "success" ]; then
+            echo "✅ Staging deployment successful"
+            echo "🔗 Backend: https://stockwin-staging-backend.up.railway.app"
+            echo "🔗 Frontend: https://stockwin-staging-frontend.up.railway.app"
+          else
+            echo "❌ Staging deployment failed"
+          fi

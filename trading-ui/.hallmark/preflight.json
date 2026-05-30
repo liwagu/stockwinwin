@@ -1,0 +1,10 @@
+{
+  "date": "2026-05-20",
+  "framework": "Next.js 15 app router",
+  "fontStack": "Geist, Geist Mono, Cormorant Garamond",
+  "palette": "Previous purple/cyan gradient-heavy CSS variables in app/globals.css",
+  "motion": "framer-motion installed",
+  "spacing": "Tailwind v4 utility scale plus shadcn-style components",
+  "preserve": ["Next.js app router", "Supabase auth flow", "Stripe flow", "prediction API contract"],
+  "introduce": ["Hallmark design.md", "tokens.css", "Workbench app structure", "Long Document legal pages"]
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-05-20",
+    "scope": "app",
+    "macrostructure": "Workbench",
+    "theme": "Quiet",
+    "enrichment": "none",
+    "brief": "StockWin full frontend UI redesign before functional pivot"
+  }
+]

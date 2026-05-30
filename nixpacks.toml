@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = []
+
+[phases.install]
+cmds = ["echo 'Using Docker'"]
+
+[phases.build]
+cmds = ["echo 'Building with Docker'"]
+
+[start]
+cmd = "echo 'Docker handled by Railway'"

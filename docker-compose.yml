@@ -1,0 +1,48 @@
+services:
+  # AI prediction service (Python FastAPI)
+  ai-service:
+    build:
+      context: ./ai-service
+    environment:
+      # Model cache directory
+      - MODEL_CACHE_DIR=./models/cache
+
+      # Kronos model configuration
+      - KRONOS_MODEL_NAME=NeoQuasar/Kronos-base
+      - KRONOS_TOKENIZER_NAME=NeoQuasar/Kronos-Tokenizer-base
+
+      # Prediction parameters
+      - PREDICTION_HORIZON_HOURS=24
+      - PREDICTION_SAMPLES=30
+      - TEMPERATURE=1.0
+      - TOP_P=0.95
+
+      # Binance API configuration
+      - BINANCE_API_TIMEOUT=30
+      - DATA_CACHE_TTL_MINUTES=55
+
+      # Scheduler (Phase 4 - not yet implemented)
+      # - SCHEDULER_ENABLED=true
+      # - SCHEDULER_CRON=0 * * * *
+
+      # Logging
+      - LOG_LEVEL=INFO
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist HuggingFace model cache
+      - ./cache/huggingface:/root/.cache/huggingface
+    restart: unless-stopped
+
+  # Frontend (Next.js)
+  trading-ui:
+    build:
+      context: ./trading-ui
+    environment:
+      - AI_SERVICE_URL=http://ai-service:8000
+      - NEXT_PUBLIC_SITE_NAME=StockWin
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ai-service
+    restart: unless-stopped

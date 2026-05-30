@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.railway
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - KRONOS_DEVICE=cpu
+      - KRONOS_MODEL_NAME=NeoQuasar/Kronos-base
+      - KRONOS_TOKENIZER_NAME=NeoQuasar/Kronos-Tokenizer-base
+      - KRONOS_MAX_CONTEXT=512
+      - KRONOS_CLIP=5
+      - MODEL_CACHE_DIR=./models/cache
+    volumes:
+      # Persist model cache to avoid re-downloading
+      - ./models/cache:/app/models/cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s # Give it 60 seconds before starting health checks
+    command: python main.py

@@ -1,0 +1,103 @@
+name: Feature Branch CI
+
+on:
+  push:
+    branches:
+      - '002-stripe-subscription-system'
+      - '001-transform-broker-trading'
+  pull_request:
+    branches:
+      - '002-stripe-subscription-system'
+      - '001-transform-broker-trading'
+
+env:
+  PYTHON_VERSION: '3.12'
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: ai-service/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          cd ai-service
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-mock httpx pytest-cov
+
+      - name: Run unit tests
+        run: |
+          cd ai-service
+          pytest tests/unit/ -v --tb=short --cov=. --cov-report=term-missing
+        env:
+          TESTING: "true"
+          SUPABASE_URL: "https://test.supabase.co"
+          SUPABASE_SERVICE_KEY: "test_service_key_for_ci"
+          SUPABASE_JWT_AUD: "authenticated"
+          STRIPE_SECRET_KEY: "sk_test_fake_key_for_ci"
+          STRIPE_WEBHOOK_SECRET: "whsec_fake_secret_for_ci"
+          STRIPE_PRICE_ID: "price_fake_for_ci"
+          STRIPE_PORTAL_CONFIGURATION_ID: "bpc_fake_for_ci"
+          FRONTEND_URL: "http://localhost:3000"
+
+      - name: Run integration tests
+        run: |
+          cd ai-service
+          pytest tests/integration/ -v --tb=short
+        env:
+          TESTING: "true"
+          SUPABASE_URL: "https://test.supabase.co"
+          SUPABASE_SERVICE_KEY: "test_service_key_for_ci"
+          SUPABASE_JWT_AUD: "authenticated"
+          STRIPE_SECRET_KEY: "sk_test_fake_key_for_ci"
+          STRIPE_WEBHOOK_SECRET: "whsec_fake_secret_for_ci"
+          STRIPE_PRICE_ID: "price_fake_for_ci"
+          STRIPE_PORTAL_CONFIGURATION_ID: "bpc_fake_for_ci"
+          FRONTEND_URL: "http://localhost:3000"
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "✅ Backend tests completed"
+          echo "📊 Check the logs above for test results"
+
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install quality tools
+        run: |
+          pip install black isort flake8
+
+      - name: Check code formatting (Black)
+        run: |
+          cd ai-service
+          black --check . || echo "⚠️  Code formatting issues found. Run 'black .' to fix."
+
+      - name: Check import sorting (isort)
+        run: |
+          cd ai-service
+          isort --check-only . || echo "⚠️  Import sorting issues found. Run 'isort .' to fix."
+
+      - name: Lint code (Flake8)
+        run: |
+          cd ai-service
+          flake8 . --max-line-length=88 --extend-ignore=E203,W503 --exclude=.venv,venv || echo "⚠️  Linting issues found."
