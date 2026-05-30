@@ -92,6 +92,7 @@ export default function LandingPage() {
         </Link>
         <div className="sw-nav-links">
           <Link href="#desk" className="sw-nav-link">Desk</Link>
+          <Link href="/paper" className="sw-nav-link">Paper</Link>
           <Link href="#pricing" className="sw-nav-link">Pricing</Link>
           <Link href={authNavLink.href} className="sw-nav-link">{authNavLink.label}</Link>
         </div>

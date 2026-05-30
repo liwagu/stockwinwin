@@ -12,6 +12,7 @@ type DashboardHeaderProps = {
 
 const navItems = [
     { label: "Markets", href: "/dashboard" },
+    { label: "Paper", href: "/paper" },
     { label: "Billing", href: "/dashboard/billing" },
     { label: "Watchlist", href: "/dashboard/watchlist" },
 ];

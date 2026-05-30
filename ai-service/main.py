@@ -213,12 +213,13 @@ app.add_middleware(
 # See middleware/auth.py for get_current_user dependency
 
 # Import routers
-from routers import users, subscriptions, webhooks
+from routers import users, subscriptions, webhooks, paper_desk
 
 # Register routers
 app.include_router(users.router)
 app.include_router(subscriptions.router)
 app.include_router(webhooks.router)
+app.include_router(paper_desk.router)
 
 
 @app.get("/")
@@ -237,7 +238,8 @@ async def root():
             "interest": "/v1/interest",
             "users": "/v1/users/me",
             "subscriptions": "/v1/subscriptions",
-            "webhooks": "/v1/webhooks/stripe"
+            "webhooks": "/v1/webhooks/stripe",
+            "paper_desk": "/v1/paper-desk/session/today"
         }
     }
 
