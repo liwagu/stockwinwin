@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isPaperDeskMockMode, submitMockAllocation } from "@/lib/paperDeskMock";
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://localhost:8000";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    if (isPaperDeskMockMode()) {
+      const result = submitMockAllocation(body);
+      return NextResponse.json(result.body, { status: result.status });
+    }
+
     const response = await fetch(`${AI_SERVICE_URL}/v1/paper-desk/allocation`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

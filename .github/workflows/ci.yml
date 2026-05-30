@@ -15,6 +15,7 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: "1"
       NEXT_PUBLIC_ENABLE_PAPER_DESK: "true"
+      PAPER_DESK_API_MODE: "mock"
       NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
       NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
       AI_SERVICE_URL: "http://localhost:8000"

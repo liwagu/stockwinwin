@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getMockTodaySession, isPaperDeskMockMode } from "@/lib/paperDeskMock";
 
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://localhost:8000";
 
@@ -6,6 +7,10 @@ export async function GET(request: NextRequest) {
   const anonymousId = request.nextUrl.searchParams.get("anonymous_id");
   if (!anonymousId) {
     return NextResponse.json({ detail: "anonymous_id is required" }, { status: 400 });
+  }
+
+  if (isPaperDeskMockMode()) {
+    return NextResponse.json(getMockTodaySession(anonymousId));
   }
 
   try {

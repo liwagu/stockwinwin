@@ -61,6 +61,7 @@ deterministic Macro / Research / Risk briefs
 - Production StockWin users must keep the existing forecast, auth, billing, and `/api/predictions` paths unchanged during Paper Desk validation.
 - A production release requires a clean worktree, passing CI, a secret scan, and live health checks for `https://www.stockwin.win/api/health` and `https://www.stockwin.win/api/predictions`.
 - If this branch is later ported into the main StockWin repo, keep the Paper Desk flag disabled in production until the route has passed preview smoke tests.
+- Isolated frontend-only previews may set `PAPER_DESK_API_MODE=mock` so the demo does not call the production backend. Do not use mock mode as production proof.
 
 ## Validation Gates
 
@@ -81,9 +82,9 @@ Frontend:
 
 ```bash
 cd trading-ui
-NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run lint
-NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run build
-NEXT_PUBLIC_ENABLE_PAPER_DESK=true npm run test
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true PAPER_DESK_API_MODE=mock npm run lint
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true PAPER_DESK_API_MODE=mock npm run build
+NEXT_PUBLIC_ENABLE_PAPER_DESK=true PAPER_DESK_API_MODE=mock npm run test
 ```
 
 Production-off smoke:

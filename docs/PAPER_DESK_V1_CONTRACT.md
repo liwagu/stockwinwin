@@ -97,6 +97,14 @@ NEXT_PUBLIC_ENABLE_PAPER_DESK=true
 
 The production default is disabled. Preview and hackathon deployments must opt in explicitly.
 
+Frontend-only preview deployments may also set:
+
+```text
+PAPER_DESK_API_MODE=mock
+```
+
+Mock mode keeps the preview off the production backend. It is only for UI/demo validation; production proof requires the FastAPI Paper Desk service and Supabase tables.
+
 Required UI:
 
 - one-person investment bank framing
